@@ -4,10 +4,7 @@
         "csstools.postcss",
         "esbenp.prettier-vscode",
         "bradlc.vscode-tailwindcss",
-        "austenc.tailwind-docs",
-        "chakrounanas.turbo-console-log",
         "formulahendry.auto-rename-tag",
-        "wix.vscode-import-cost",
         "nextpress.nextpress-snippets"
     ]
 }
