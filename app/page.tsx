@@ -9,6 +9,7 @@ type TLink = {
 
 const links: TLink[] = [
   { id: 1, href: '/counter', label: 'Számláló' },
+  { id: 2, href: '/teglalap', label: 'Téglalap KT' },
 ];
 
 export default function Home() {

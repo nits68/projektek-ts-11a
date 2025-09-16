@@ -1,0 +1,56 @@
+type SearchParams = {
+  a?: string;
+  b?: string;
+};
+
+export default async function TeglalapPage({ searchParams }: { searchParams: SearchParams }) {
+  const params = await searchParams;
+  let a: number = params?.a ? parseFloat(params.a) : 3;
+  let b: number = params?.b ? parseFloat(params.b) : 4;
+  a = isNaN(a) ? 3 : a;
+  b = isNaN(b) ? 4 : b;
+
+  const terület = a * b;
+  const kerulet = 2 * (a + b);
+
+  return (
+    <div className="flex min-h-screen items-center justify-center bg-gray-200">
+      <div className="flex w-100 flex-col rounded-lg bg-white p-6 font-mono text-lg shadow-lg">
+        <form>
+          <p>Téglalap kerülete és területe</p>
+          <p>
+            a oldal:
+            <input
+              type="number"
+              required
+              min={0}
+              name="a"
+              step="any"
+              defaultValue={a}
+              placeholder="Kérem az oldal hosszát!"
+              className="input input-primary"
+            />
+          </p>
+          <p>
+            b oldal:
+            <input
+              type="number"
+              required
+              min={0}
+              name="b"
+              step="any"
+              placeholder="Kérem az oldal hosszát!"
+              defaultValue={b}
+              className="input input-primary"
+            />
+          </p>
+          <div>
+            <p>Kerület: {kerulet}</p>
+            <p>Terület: {terület}</p>
+          </div>
+          <button type="submit" className="hidden"></button>
+        </form>
+      </div>
+    </div>
+  );
+}
