@@ -5,8 +5,8 @@ type SearchParams = {
 
 export default async function TeglalapPage({ searchParams }: { searchParams: SearchParams }) {
   const params = await searchParams;
-  let a: number = params?.a ? parseFloat(params.a) : 3;
-  let b: number = params?.b ? parseFloat(params.b) : 4;
+  let a: number = params.a ? parseFloat(params.a) : 3;
+  let b: number = params.b ? parseFloat(params.b) : 4;
   a = isNaN(a) ? 3 : a;
   b = isNaN(b) ? 4 : b;
 
@@ -44,10 +44,32 @@ export default async function TeglalapPage({ searchParams }: { searchParams: Sea
               className="input input-primary"
             />
           </p>
-          <div>
-            <p>Kerület: {kerulet}</p>
-            <p>Terület: {terület}</p>
-          </div>
+          {a == 0 || b == 0 ? (
+            <div>
+              <p className="text-red-500">Az oldal(ak) hossza nem lehet nulla!</p>
+            </div>
+          ) : (
+            <div>
+              <p>Kerület: {kerulet}</p>
+              <p>Terület: {terület}</p>
+            </div>
+          )}
+
+          {/* Példák egyágú elágazásra: */}
+
+          {a > 0 && b > 0 && (
+            <div>
+              <p>Kerület: {kerulet}</p>
+              <p>Terület: {terület}</p>
+            </div>
+          )}
+
+          {(a == 0 || b == 0) && (
+              <div>
+                <p className="text-red-500">Az oldal(ak) hossza nem lehet nulla!</p>
+              </div>
+            )}
+
           <button type="submit" className="hidden"></button>
         </form>
       </div>
