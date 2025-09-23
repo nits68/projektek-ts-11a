@@ -4,7 +4,7 @@ import { useState } from 'react';
 
 export default function TeglalapClientPage() {
   const [a, setA] = useState<number>(3);
-  const [b, setB] = useState<number>(4);
+  const [b, setB] = useState(4);
 
   const kerület = 2 * (a + b);
   const terület = a * b;

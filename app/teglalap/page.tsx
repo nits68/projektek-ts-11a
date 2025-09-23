@@ -10,8 +10,13 @@ export default async function TeglalapPage({ searchParams }: { searchParams: Sea
   a = isNaN(a) ? 3 : a;
   b = isNaN(b) ? 4 : b;
 
-  const terület = a * b;
-  const kerulet = 2 * (a + b);
+  let terület: number | undefined = undefined;
+  let kerület: number | undefined = undefined;
+
+  if (a != 0 && b != 0) {
+    terület = a * b;
+    kerület = 2 * (a + b);
+  }
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-gray-200">
@@ -50,7 +55,7 @@ export default async function TeglalapPage({ searchParams }: { searchParams: Sea
             </div>
           ) : (
             <div>
-              <p>Kerület: {kerulet}</p>
+              <p>Kerület: {kerület}</p>
               <p>Terület: {terület}</p>
             </div>
           )}
@@ -59,16 +64,16 @@ export default async function TeglalapPage({ searchParams }: { searchParams: Sea
 
           {a > 0 && b > 0 && (
             <div>
-              <p>Kerület: {kerulet}</p>
+              <p>Kerület: {kerület}</p>
               <p>Terület: {terület}</p>
             </div>
           )}
 
           {(a == 0 || b == 0) && (
-              <div>
-                <p className="text-red-500">Az oldal(ak) hossza nem lehet nulla!</p>
-              </div>
-            )}
+            <div>
+              <p className="text-red-500">Az oldal(ak) hossza nem lehet nulla!</p>
+            </div>
+          )}
 
           <button type="submit" className="hidden"></button>
         </form>
