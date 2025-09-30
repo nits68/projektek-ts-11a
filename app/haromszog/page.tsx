@@ -7,65 +7,89 @@ function ezMegszerkeszthető(a: number, b: number, c: number): boolean {
 }
 
 function ezDerékszögű(a: number, b: number, c: number) {
-  const oldalak: number[] = [a, b, c];
-  oldalak.sort();
-  const ao: number = oldalak[0];
-  const bo: number = oldalak[1];
-  const co: number = oldalak[2];
-  return Math.pow(ao, 2) + Math.pow(bo, 2) == Math.pow(co, 2);
+  // 1. Megoldás sort():
+  // const old: number[] = [a, b, c];
+  // old.sort();
+  // return old[0] ** 2 + old[1] ** 2 == old[2] ** 2
+
+  // 2. Matematikai megoldás:
+  // const átfogó = Math.max(a, b, c);
+  // const szum = a + b + c;
+  // const befogó1 = szum - átfogó - Math.min(a, b, c); // nagyobb befogó
+  // const befogó2 = szum - átfogó - befogó1; // rövidebb befogó
+  // return befogó1 ** 2 + befogó2 ** 2 == átfogó ** 2;
+
+  // 3. Megoldás filter()-el
+  // const átfogó = Math.max(a, b, c);
+  // const befogók = [a, b, c].filter((e) => e != átfogó);
+  // const [b1, b2] = befogók; // tömb destrukturálás
+  // return b1 ** 2 + b2 ** 2 == átfogó ** 2;
+
+  // 4. Megoldás íf-ek használatával
+  const átfogó = Math.max(a, b, c);
+  if (a == átfogó) return b ** 2 + c ** 2 == a ** 2;
+  if (b == átfogó) return a ** 2 + c ** 2 == b ** 2;
+  return a ** 2 + b ** 2 == c ** 2;
 }
 
 function kerület(a: number, b: number, c: number) {
   return a + b + c;
 }
 
-function területDerékszög(a: number, b: number, c: number) {
-  const oldalak: number[] = [a, b, c];
-  oldalak.sort();
-  return (oldalak[0] * oldalak[1]) / 2;
-}
+// function területDerékszög(a: number, b: number, c: number) {
+//   const oldalak: number[] = [a, b, c];
+//   oldalak.sort();
+//   return (oldalak[0] * oldalak[1]) / 2;
+// }
 
-function területHeron(a: number, b: number, c: number) {
-  const s: number = kerület(a, b, c) / 2;
-  return Math.sqrt(s * (s - a) * (s - b) * (s - c));
+// function területHeron(a: number, b: number, c: number) {
+//   const s: number = kerület(a, b, c) / 2;
+//   return Math.sqrt(s * (s - a) * (s - b) * (s - c));
+// }
+
+function terület(a: number, b: number, c: number) {
+  if (ezDerékszögű(a, b, c)) {
+    const átfogó = Math.max(a, b, c);
+    const befogók = [a, b, c].filter((e) => e != átfogó);
+    const [b1, b2] = befogók; // tömb destrukturálás
+    return (b1 * b2) / 2;
+  } else {
+    const s: number = kerület(a, b, c) / 2;
+    return Math.sqrt(s * (s - a) * (s - b) * (s - c));
+  }
 }
 
 export default function HaromszogPage() {
-  const [A, setA] = useState('3');
-  const [B, setB] = useState('4');
-  const [C, setC] = useState('5');
+  const [_a, set_a] = useState('3');
+  const [_b, set_b] = useState('4');
+  const [_c, set_c] = useState('5');
 
-  let ker: number = NaN;
-  let ter: number = NaN;
+  let ker: number = 0;
+  let ter: number = 0;
 
-  const a: number = parseFloat(A);
-  const b: number = parseFloat(B);
-  const c: number = parseFloat(C);
+  const a: number = _a == '' ? NaN : Number(_a); // Number("") == 0, de mi NaN konstans szeretnénk
+  const b: number = _b == '' ? NaN : Number(_b);
+  const c: number = _c == '' ? NaN : Number(_c);
 
-  let hiba: string | undefined = undefined; // feltételezzük, hogy nincs hiba (undefined)
+  let hiba: string = ''; // feltételezzük, hogy nincs hiba, üres sztring
 
   // Sikeres volt az átalakítás?
-  if (
-    isNaN(a) ||
-    isNaN(b) ||
-    isNaN(c) ||
-    a.toString().length != A.length ||
-    b.toString().length != B.length ||
-    c.toString().length != C.length
-  )
-    hiba = 'Konverziós hiba';
+  // if (
+  //   isNaN(a) ||
+  //   isNaN(b) ||
+  //   isNaN(c)
+  // )
+  //   hiba = 'Konverziós hiba';
 
-  // Szerkeszthetőség ellenőrzés, ha nincs hiba:
-  if (!hiba && !ezMegszerkeszthető(a, b, c)) hiba = 'Nem szerkeszthető';
-
-  if (!hiba) {
+  if ([a, b, c].some((e) => isNaN(e))) {
+    hiba = 'Konverziós hiba!';
+  } else if (ezMegszerkeszthető(a, b, c)) {
     ker = kerület(a, b, c);
-    if (ezDerékszögű(a, b, c)) {
-      ter = területDerékszög(a, b, c);
-    } else {
-      ter = területHeron(a, b, c);
-    }
+    ter = terület(a, b, c);
+  } else {
+    hiba = 'Nem szerkeszthető';
   }
+
 
   return (
     <div className="flex min-h-screen flex-col items-center justify-center bg-gray-200">
@@ -73,15 +97,15 @@ export default function HaromszogPage() {
         <h1 className="text-2xl font-bold">Háromszög területe és kerülete</h1>
         <p>
           a =
-          <input type="text" value={A} onChange={(e) => setA(e.target.value)} className="input input-primary" />
+          <input type="text" value={_a} onChange={(e) => set_a(e.target.value)} className="input input-primary" />
         </p>
         <p>
           b =
-          <input type="text" value={B} onChange={(e) => setB(e.target.value)} className="input input-primary" />
+          <input type="text" value={_b} onChange={(e) => set_b(e.target.value)} className="input input-primary" />
         </p>
         <p>
           c =
-          <input type="text" value={C} onChange={(e) => setC(e.target.value)} className="input input-primary" />
+          <input type="text" value={_c} onChange={(e) => set_c(e.target.value)} className="input input-primary" />
         </p>
         <div>
           {hiba ? (
