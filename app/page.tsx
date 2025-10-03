@@ -12,6 +12,7 @@ const links: TLink[] = [
   { id: 2, href: '/teglalap', label: 'Téglalap KT' },
   { id: 3, href: '/teglalap-client', label: 'Téglalap KT - client' },
   { id: 4, href: '/haromszog', label: 'Háromszög T-K' },
+  { id: 5, href: '/useeffectdemo', label: 'useEffect demo' },
 ];
 
 export default function Home() {

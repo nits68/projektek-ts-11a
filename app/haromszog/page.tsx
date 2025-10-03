@@ -90,7 +90,6 @@ export default function HaromszogPage() {
     hiba = 'Nem szerkeszthető';
   }
 
-
   return (
     <div className="flex min-h-screen flex-col items-center justify-center bg-gray-200">
       <div className="flex w-100 flex-col gap-y-5 rounded-lg bg-white p-5 shadow-lg">
