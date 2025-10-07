@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
+import { useState } from "react";
 
 function ezMegszerkeszthető(a: number, b: number, c: number): boolean {
   return a + b > c && a + c > b && c + b > a;
@@ -60,18 +60,18 @@ function terület(a: number, b: number, c: number) {
 }
 
 export default function HaromszogPage() {
-  const [_a, set_a] = useState('3');
-  const [_b, set_b] = useState('4');
-  const [_c, set_c] = useState('5');
+  const [_a, set_a] = useState("3");
+  const [_b, set_b] = useState("4");
+  const [_c, set_c] = useState("5");
 
   let ker: number = 0;
   let ter: number = 0;
 
-  const a: number = _a == '' ? NaN : Number(_a); // Number("") == 0, de mi NaN konstans szeretnénk
-  const b: number = _b == '' ? NaN : Number(_b);
-  const c: number = _c == '' ? NaN : Number(_c);
+  const a: number = _a == "" ? NaN : Number(_a); // Number("") == 0, de mi NaN konstans szeretnénk
+  const b: number = _b == "" ? NaN : Number(_b);
+  const c: number = _c == "" ? NaN : Number(_c);
 
-  let hiba: string = ''; // feltételezzük, hogy nincs hiba, üres sztring
+  let hiba: string = ""; // feltételezzük, hogy nincs hiba, üres sztring
 
   // Sikeres volt az átalakítás?
   // if (
@@ -82,12 +82,12 @@ export default function HaromszogPage() {
   //   hiba = 'Konverziós hiba';
 
   if ([a, b, c].some((e) => isNaN(e))) {
-    hiba = 'Konverziós hiba!';
+    hiba = "Konverziós hiba!";
   } else if (ezMegszerkeszthető(a, b, c)) {
     ker = kerület(a, b, c);
     ter = terület(a, b, c);
   } else {
-    hiba = 'Nem szerkeszthető';
+    hiba = "Nem szerkeszthető";
   }
 
   return (
@@ -96,22 +96,41 @@ export default function HaromszogPage() {
         <h1 className="text-2xl font-bold">Háromszög területe és kerülete</h1>
         <p>
           a =
-          <input type="text" value={_a} onChange={(e) => set_a(e.target.value)} className="input input-primary" />
+          <input
+            className="input input-primary"
+            type="text"
+            value={_a}
+            onChange={(e) => set_a(e.target.value)}
+          />
         </p>
         <p>
           b =
-          <input type="text" value={_b} onChange={(e) => set_b(e.target.value)} className="input input-primary" />
+          <input
+            className="input input-primary"
+            type="text"
+            value={_b}
+            onChange={(e) => set_b(e.target.value)}
+          />
         </p>
         <p>
           c =
-          <input type="text" value={_c} onChange={(e) => set_c(e.target.value)} className="input input-primary" />
+          <input
+            className="input input-primary"
+            type="text"
+            value={_c}
+            onChange={(e) => set_c(e.target.value)}
+          />
         </p>
         <div>
           {hiba ? (
             <h1>{hiba}</h1>
           ) : (
             <div>
-              {ezDerékszögű(a, b, c) ? <h1>Derékszögű a háromszög</h1> : <h1>Általános háromszög</h1>}
+              {ezDerékszögű(a, b, c) ? (
+                <h1>Derékszögű a háromszög</h1>
+              ) : (
+                <h1>Általános háromszög</h1>
+              )}
               <h1>Kerület: {ker}</h1>
               <h1>Terület: {ter}</h1>
             </div>

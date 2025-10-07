@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { IncrementButton } from './IncrementButton';
-import BackToMain from '@/components/BackToMain';
+import { useState } from "react";
+import BackToMain from "@/components/BackToMain";
+import { IncrementButton } from "./IncrementButton";
 
 export default function CounterPage() {
   // let counter: number = 0;

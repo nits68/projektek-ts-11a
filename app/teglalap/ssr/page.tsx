@@ -1,3 +1,5 @@
+// ez egy Server Side Rendered (SSR) oldal (nincs "use client")
+
 type SearchParams = {
   a?: string;
   b?: string;
@@ -26,27 +28,27 @@ export default async function TeglalapPage({ searchParams }: { searchParams: Sea
           <p>
             a oldal:
             <input
-              type="number"
-              required
+              className="input input-primary"
+              defaultValue={a}
               min={0}
               name="a"
-              step="any"
-              defaultValue={a}
               placeholder="Kérem az oldal hosszát!"
-              className="input input-primary"
+              required
+              step="any"
+              type="number"
             />
           </p>
           <p>
             b oldal:
             <input
-              type="number"
-              required
+              className="input input-primary"
+              defaultValue={b}
               min={0}
               name="b"
-              step="any"
               placeholder="Kérem az oldal hosszát!"
-              defaultValue={b}
-              className="input input-primary"
+              required
+              step="any"
+              type="number"
             />
           </p>
           {a == 0 || b == 0 ? (
@@ -75,7 +77,7 @@ export default async function TeglalapPage({ searchParams }: { searchParams: Sea
             </div>
           )}
 
-          <button type="submit" className="hidden"></button>
+          <button className="hidden" type="submit"></button>
         </form>
       </div>
     </div>

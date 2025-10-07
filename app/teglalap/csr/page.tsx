@@ -1,6 +1,6 @@
-'use client';
+"use client"; // ez egy Client Side Rendered (CSR) oldal
 
-import { useState } from 'react';
+import { useState } from "react";
 
 export default function TeglalapClientPage() {
   const [a, setA] = useState<number>(3);
@@ -10,28 +10,28 @@ export default function TeglalapClientPage() {
   const terület = a * b;
   return (
     <div className="flex min-h-screen flex-col items-center justify-center bg-gray-200">
-      <div className="flex w-100 flex-col gap-y-3 rounded-lg bg-white p-5 font-mono shadow-lg0">
+      <div className="shadow-lg0 flex w-100 flex-col gap-y-3 rounded-lg bg-white p-5 font-mono">
         <p>Téglalap kerülete és területe</p>
         <p>
           a oldal:
           <input
-            type="number"
+            className="input ml-2 h-9 w-36 input-primary"
             min={0}
             step="any"
+            type="number"
             value={a}
             onChange={(e) => setA(Number(e.target.value))}
-            className="input ml-2 h-9 w-36 input-primary" 
           />
         </p>
         <p>
           b oldal:
           <input
-            type="number"
+            className="input ml-2 h-9 w-36 input-primary"
             min={0}
             step="any"
+            type="number"
             value={b}
             onChange={(e) => setB(parseFloat(e.target.value))}
-            className="input ml-2 h-9 w-36 input-primary"
           />
         </p>
         {a > 0 && b > 0 ? (
