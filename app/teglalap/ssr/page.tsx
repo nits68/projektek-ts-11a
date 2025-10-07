@@ -1,16 +1,20 @@
 // ez egy Server Side Rendered (SSR) oldal (nincs "use client")
 
+// a searchParams objektumot a Next.js adja át a komponensnek
+// a URL query paramétereit tartalmazza
+// pl. /teglalap/ssr?a=3&b=4 esetén: { a: "3", b: "4" }
+
 type SearchParams = {
   a?: string;
   b?: string;
 };
 
 export default async function TeglalapPage({ searchParams }: { searchParams: SearchParams }) {
-  const params = await searchParams;
-  let a: number = params.a ? Number(params.a) : 3;
-  let b: number = params.b ? Number(params.b) : 4;
-  a = isNaN(a) ? 3 : a;
-  b = isNaN(b) ? 4 : b;
+  const params = await searchParams; // ez egy Promise, ezért várjuk meg az értékét
+  let a: number = params.a ? Number(params.a) : 3; // ha nincs paraméter, akkor legyen 3
+  let b: number = params.b ? Number(params.b) : 4; // ha nincs paraméter, akkor legyen 4
+  a = isNaN(a) ? 5 : a; // ha nem alakítható számra, akkor legyen 5
+  b = isNaN(b) ? 6 : b; // ha nem alakítható számra, akkor legyen 6
 
   let terület: number | undefined = undefined;
   let kerület: number | undefined = undefined;
@@ -35,7 +39,7 @@ export default async function TeglalapPage({ searchParams }: { searchParams: Sea
               placeholder="Kérem az oldal hosszát!"
               required
               step="any"
-              type="number"
+              type="string"
             />
           </p>
           <p>
@@ -48,7 +52,7 @@ export default async function TeglalapPage({ searchParams }: { searchParams: Sea
               placeholder="Kérem az oldal hosszát!"
               required
               step="any"
-              type="number"
+              type="string"
             />
           </p>
           {a == 0 || b == 0 ? (

@@ -1,13 +1,15 @@
-"use client"; // ez egy Client Side Rendered (CSR) oldal
+"use client";
 
+// ez egy Client Side Rendered (CSR) oldal
 import { useState } from "react";
 
 export default function TeglalapClientPage() {
-  const [a, setA] = useState<number>(3);
-  const [b, setB] = useState(4);
+  const [a, setA] = useState<number>(3); // explicit megadtuk a típusát
+  const [b, setB] = useState(4); // implicit módon a 4-ből következtet a típusra
 
-  const kerület = 2 * (a + b);
-  const terület = a * b;
+  const kerület = 2 * (a + b); // "a" vagy "b" változása esetén újra lefut a függvény
+  const terület = a * b; // így a kerület és terület is mindig új értéket kap
+
   return (
     <div className="flex min-h-screen flex-col items-center justify-center bg-gray-200">
       <div className="shadow-lg0 flex w-100 flex-col gap-y-3 rounded-lg bg-white p-5 font-mono">
@@ -34,6 +36,7 @@ export default function TeglalapClientPage() {
             onChange={(e) => setB(parseFloat(e.target.value))}
           />
         </p>
+        {/* Kétágú elágazás feltételes (?:) operátorral */}
         {a > 0 && b > 0 ? (
           <div>
             <p>Kerület: {kerület}</p>

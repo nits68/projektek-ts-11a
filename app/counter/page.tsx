@@ -6,8 +6,9 @@ import { IncrementButton } from "./IncrementButton";
 
 export default function CounterPage() {
   // let counter: number = 0;
-  // useState egy React Hook, ami egy változót és egy függvényt ad vissza
+  // useState egy React Hook, ami egy változót és egy függvényt ad vissza egy tömbben
   // a változó értékének beállítására
+  // tömb destruktúrálással vesszük ki a tömbből a két (counter, setCounter) elemet:
   const [counter, setCounter] = useState(0);
 
   return (
