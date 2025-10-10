@@ -4,6 +4,9 @@
 import { useState } from "react";
 
 export default function TeglalapClientPage() {
+  
+  // useState hook a reaktív változók létrehozásához
+  // reaktív -> ha változik az értékük, újrarenderelődik a komponens, látható a változás az oldalon
   const [a, setA] = useState<number>(3); // explicit megadtuk a típusát
   const [b, setB] = useState(4); // implicit módon a 4-ből következtet a típusra
 
