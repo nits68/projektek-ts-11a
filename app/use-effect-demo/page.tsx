@@ -6,7 +6,7 @@ import toast from "react-hot-toast";
 export default function UseEffectDemo() {
   const [name, setName] = useState("");
   const [age, setAge] = useState<number | "">("");
-  const [message, setMessage] = useState("");
+  // const [message, setMessage] = useState("");
 
   useEffect(() => {
     toast.success("Oldal betöltve!");
@@ -16,17 +16,26 @@ export default function UseEffectDemo() {
     toast("Oldal renderelve!", { icon: "👀" });
   });
 
-  useEffect(() => {
-    if (name && age) {
-      setMessage(`Szia ${name}, Te ${age} éves vagy!`);
-    } else if (name) {
-      setMessage(`Szia ${name}! Adjad meg az élekorodat is!`);
-    } else if (age) {
-      setMessage(`Beírtad, hogy ${age} éves vagy. Add meg a neved is!`);
-    } else {
-      setMessage("Kérlek, add meg a neved és az életkorod is!");
-    }
-  }, [name, age]);
+  let message = "";
+  if (name && age) {
+    message = `Szia ${name}, Te ${age} éves vagy!`;
+  } else if (name) {
+    message = `Szia ${name}! Add meg az életkorodat is!`;
+  } else if (age) {
+    message = `Megadtad az életkorod (${age}), de mi a neved?`;
+  }
+
+  // useEffect(() => {
+  //   if (name && age) {
+  //     setMessage(`Szia ${name}, Te ${age} éves vagy!`);
+  //   } else if (name) {
+  //     setMessage(`Szia ${name}! Adjad meg az élekorodat is!`);
+  //   } else if (age) {
+  //     setMessage(`Beírtad, hogy ${age} éves vagy. Add meg a neved is!`);
+  //   } else {
+  //     setMessage("Kérlek, add meg a neved és az életkorod is!");
+  //   }
+  // }, [name, age]);
 
   return (
     <main className="flex min-h-screen items-center justify-center bg-gray-200">
