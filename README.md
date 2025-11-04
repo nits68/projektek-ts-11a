@@ -12,7 +12,8 @@ Majd interaktív lépések
 
 > What is your project named? projekt_neve<br>
 > Would you like to use TypeScript? No / **Yes**<br>
-> Would you like to use ESLint? No / **Yes**<br>
+> Which linter would you like to use? **ESLint**<br>
+> Would you like to use React Compiler? **No** / Yes<br>
 > Would you like to use Tailwind CSS? No / **Yes**<br>
 > Would you like your code inside a `src/` directory? **No** / Yes<br>
 > Would you like to use App Router? (recommended) No / **Yes**<br>
@@ -33,9 +34,12 @@ Majd interaktív lépések
     "bradlc.vscode-tailwindcss",
     "formulahendry.auto-rename-tag",
     "nextpress.nextpress-snippets",
-    "abdulowhab.json-to-ts-type"
+    "abdulowhab.json-to-ts-type",
+    "tomoki1207.pdf",
+    "humao.rest-client",
   ]
 }
+
 
 ```
 
@@ -45,8 +49,26 @@ Majd interaktív lépések
 {
   "version": "0.2.0",
   "configurations": [
+     {
+      "name": "Debug client-side in Edge",
+      "type": "msedge",
+      "request": "launch",
+      "url": "http://localhost:3000",
+    },
     {
-      "name": "Next.js: debug full stack",
+      "name": "Debug client-side in Chrome",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:3000",
+    },
+    {
+      "name": "Debug server-side",
+      "type": "node-terminal",
+      "request": "launch",
+      "command": "npm run dev"
+    },
+    {
+      "name": "Debug full stack",
       "type": "node",
       "request": "launch",
       "program": "${workspaceFolder}/node_modules/next/dist/bin/next",
@@ -91,6 +113,7 @@ Majd interaktív lépések
   "javascript.preferences.importModuleSpecifier": "non-relative"
 }
 
+
 ```
 
 .vscode/tasks.json
@@ -122,6 +145,7 @@ Majd interaktív lépések
 ```
 
 ### 1.3 Prettier és ESLint kiegészítők telepítése, beállítása, elemek (osztályok, property-k, importok) sorba rendezése
+
 ```
 npm i -D prettier prettier-plugin-tailwindcss eslint-config-prettier eslint-plugin-react @trivago/prettier-plugin-sort-imports
 ```
@@ -129,7 +153,6 @@ npm i -D prettier prettier-plugin-tailwindcss eslint-config-prettier eslint-plug
 **.prettierrc** állomány létrehozása(másolása) a projekt főkönyvtárába
 
 ```
-
 {
     "singleQuote": false,
     "semi": true,
@@ -144,6 +167,9 @@ npm i -D prettier prettier-plugin-tailwindcss eslint-config-prettier eslint-plug
         "<THIRD_PARTY_MODULES>",
         "@/(.*)$",
         "^[./]"
+    ],
+    "tailwindFunctions": [
+        "clsx"
     ],
     "importOrderSeparation": false,
     "importOrderSortSpecifiers": true,
@@ -167,22 +193,16 @@ Prettier scriptek hozzáadása a **package.json**-ba:
 eslint.config.mjs
 
 ```
-import { dirname } from "path";
-import { fileURLToPath } from "url";
-import { FlatCompat } from "@eslint/eslintrc";
-import prettier from "eslint-config-prettier";
+import nextVitals from "eslint-config-next/core-web-vitals";
+import nextTs from "eslint-config-next/typescript";
+import prettier from "eslint-config-prettier/flat";
+import { defineConfig, globalIgnores } from "eslint/config";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
-const compat = new FlatCompat({
-  baseDirectory: __dirname,
-});
-
-const eslintConfig = [
-  ...compat.extends("next/core-web-vitals", "next/typescript"),
+const eslintConfig = defineConfig([
+  ...nextVitals,
+  ...nextTs,
+  prettier,
   {
-    ignores: ["node_modules/**", ".next/**", "out/**", "build/**", "next-env.d.ts"],
     rules: {
       "react/jsx-sort-props": [
         2,
@@ -199,14 +219,23 @@ const eslintConfig = [
       ],
     },
   },
-  prettier, // Make sure this is always the last element in the array.
-];
+  // Override default ignores of eslint-config-next.
+  globalIgnores([
+    // Default ignores of eslint-config-next:
+    ".next/**",
+    "out/**",
+    "build/**",
+    "next-env.d.ts",
+  ]),
+]);
 
 export default eslintConfig;
 ```
+
 [További opciók - GitHub link](https://github.com/tailwindlabs/prettier-plugin-tailwindcss)
 
 ### 1.5 Next.js konfigurálása: next.config.ts
+
 Kép optimalizáció kikapcsolása, így bárhonnan tölthetünk le képeket (vagy meg kell adni a forrás URL-t):
 
 ```
@@ -214,16 +243,22 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   /* config options here */
+  
+  // Disable React Strict Mode
+  // reactStrictMode: false,
+
+  // Disable image optimization
   images: {
     unoptimized: true,
   },
 };
 
 export default nextConfig;
+
 ```
 
-
 ## 2. daisyUI telepítése
+
 Teljesen Tailwind CSS alapú, "összefogja" Bootstrap szerűen a Tailwind osztályokat
 
 ```
@@ -240,19 +275,24 @@ npm i -D daisyui@latest
 
 [daisyUI dokumentáció](https://daisyui.com/docs/intro/)
 
+## 3. Axios telepítése (opcionális, fetch API használható helyette)
 
-## 3. Axios telepítése
 Backend API hívásokhoz, egyszerűbben használható, mint a beépített fetch()
+
 ```
 npm install axios
 ```
 
 ## 4. A react-hot-toast telepítése, layout.tsx egyszerűsítése
+
 Felugró toast üzenetekhez https://react-hot-toast.com/docs
+
 ```
 npm install react-hot-toast
 ```
+
 A main layout.tsx bővítése és egyszerűsítése:
+
 ```
 import type { Metadata } from "next";
 import { Toaster } from "react-hot-toast";
@@ -281,68 +321,229 @@ export default function RootLayout({
 ```
 
 ## 5. A page.tsx egyszerűsítése
+
 ```
-export default function Home() {
+"use client";
+
+import { clsx } from "clsx";
+import { useGlobalStore } from "@/store/globalStore";
+import toast from "react-hot-toast";
+import { useEffect } from "react";
+
+export default function HomePage() {
+  const { loggedUser, setLoggedUser } = useGlobalStore();
+
+  
+  useEffect(() => {
+    toast.success("Render page!");
+  });
+
   return (
     <div>
-      <h1 className="text-3xl font-bold">Hello, world!</h1>
+      <h1 className={clsx("text-3xl font-bold", { "text-red-500": !loggedUser })}>
+        Hello, {loggedUser || ""}!
+      </h1>
+      <input
+        className="input input-primary"
+        type="text"
+        value={loggedUser || ""}
+        onChange={(e) => setLoggedUser(e.target.value)}
+      />
     </div>
   );
 }
+
 ```
 
-## Tailwind CSS osztályok sorrendje
+## 6. Zustand - Global state management tool
+
+### 6.1 Install zustand
+```
+npm i zustand
+```
+
+### 6.2 Create persist Global Store: /store/globalStore.ts
+```
+import { create } from "zustand";
+import { persist } from "zustand/middleware";
+import { immer } from "zustand/middleware/immer";
+
+type GlobalState = {
+  loggedUser: string | null;
+  isLightTheme: boolean;
+  id: number | null;
+  setId: (newId: number | null) => void;
+  setLoggedUser: (user: string | null) => void;
+  toggleTheme: () => void;
+};
+
+export const useGlobalStore = create<GlobalState>()(
+  persist(
+    immer((set) => ({
+      loggedUser: null,
+      isLightTheme: true,
+      id: null,
+      setId: (newId) =>
+        set((state) => {
+          state.id = newId;
+        }),
+      setLoggedUser: (user) =>
+        set((state) => {
+          state.loggedUser = user;
+        }),
+      toggleTheme: () =>
+        set((state) => {
+          state.isLightTheme = !state.isLightTheme;
+        }),
+    })),
+    { name: "global-store" }, // kulcs a localStorage-ben
+  ),
+);
+```
+### 6.3 Use Zustand global store
+```
+import { useGlobalStore } from "@/store/globalStore";
+...
+const { loggedUser } = useGlobalStore();
+...
+return <div>loggedUser</div>
+```
+
+## 7. Install clsx function
+```
+npm i clsx
+```
+Add example:
+```
+import { clsx } from "clsx";
+...
+<h1 className={clsx("text-3xl font-bold", { "text-red-500": !loggedUser })}>
+  Hello, {loggedUser || ""}!
+</h1>
+```
+
+## 8. Install React Developer Tools
+
+[MS Edge](https://microsoftedge.microsoft.com/addons/detail/react-developer-tools/gpphkfbcpidddadnkolkpfckpihlkkil?refid=bingshortanswersdownload)
+
+[Google Chrome](https://chromewebstore.google.com/detail/react-developer-tools/fmkadmapgofadopljbjfkapdkoienihi)
+
+## 9. Linkek, dokumentációk
+
+- [React.js](https://react.dev/reference/react)
+- [Next.js](https://nextjs.org/docs)
+- [Tailwind CSS](https://tailwindcss.com/docs)
+- [daisyUI](https://daisyui.com/components/)
+- [Typescript](https://www.typescriptlang.org/)
+- [Zustand](https://zustand.docs.pmnd.rs/getting-started/introduction)
+- [DevDocs](https://devdocs.io/)
+- [Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API)
+- [Axios with TypeScript](https://bobbyhadz.com/blog/typescript-http-request-axios)
+- [Fetch API with Typescript](https://bobbyhadz.com/blog/typescript-http-request)
+- [GetEmoji](https://getemoji.com/)
+
+
+## 1. Tailwind CSS osztályok funkcionális sorrendje
+
 A plugin az 1–17 kategória (funkcionális logika) szerint rendez, nem ABC-sorrendben, hanem a Tailwind buildlogika alapján.
 
 1. Layout: Ezek határozzák meg az elem megjelenésének alapját:
-> container, box-decoration-slice, box-border, block, inline-block, flex, grid, table, contents, hidden, ...
+
+```
+container, box-decoration-slice, box-border, block, inline-block, flex, grid, table, contents, hidden, ...
+```
 
 2. Box model / Display properties:
-> float, clear, isolation, object-contain, overflow-auto, overscroll-none, ...
+
+```
+float, clear, isolation, object-contain, overflow-auto, overscroll-none, ...
+```
 
 3. Positioning:
-> static, fixed, absolute, relative, sticky, inset-0, top-0, right-0, bottom-0, left-0, z-10, ...
+
+```
+static, fixed, absolute, relative, sticky, inset-0, top-0, right-0, bottom-0, left-0, z-10, ...
+```
 
 4. Flexbox & Grid:
-> flex-row, flex-col, flex-wrap, place-content-center, items-center, justify-between, gap-4, grid-cols-2, ...
+
+```
+flex-row, flex-col, flex-wrap, place-content-center, items-center, justify-between, gap-4, grid-cols-2, ...
+```
 
 5. Box sizing & Spacing:
-> w-*, min-w-*, max-w-*, h-*, p-*, m-*, space-x-*, space-y-*, ...
+
+```
+w-*, min-w-*, max-w-*, h-*, p-*, m-*, space-x-*, space-y-*, ...
+```
 
 6. Typography:
-> font-sans, text-sm, font-bold, leading-tight, tracking-wide, text-gray-700, italic, underline, ...
+
+```
+font-sans, text-sm, font-bold, leading-tight, tracking-wide, text-gray-700, italic, underline, ...
+```
 
 7. Backgrounds:
-> bg-transparent, bg-gray-100, bg-gradient-to-r, from-blue-500, via-green-400, to-yellow-300, ...
+
+```
+bg-transparent, bg-gray-100, bg-gradient-to-r, from-blue-500, via-green-400, to-yellow-300, ...
+```
 
 8. Borders:
-> border, border-0, border-2, border-gray-300, rounded-lg, rounded-full, ...
+
+```
+border, border-0, border-2, border-gray-300, rounded-lg, rounded-full, ...
+```
 
 9. Effects:
-> shadow, shadow-md, opacity-50, mix-blend-multiply, ...
+
+```
+shadow, shadow-md, opacity-50, mix-blend-multiply, ...
+```
 
 10. Filters:
-> blur, brightness-90, contrast-125, grayscale, sepia, ...
+
+```
+blur, brightness-90, contrast-125, grayscale, sepia, ...
+```
 
 11. Transitions & Animations:
-> transition, duration-300, ease-in-out, animate-bounce, ...
+
+```
+transition, duration-300, ease-in-out, animate-bounce, ...
+```
 
 12. Transforms:
-> scale-95, rotate-180, translate-x-2, transform-gpu, ...
+
+```
+scale-95, rotate-180, translate-x-2, transform-gpu, ...
+```
 
 13. Interactivity / Behaviour:
-> cursor-pointer, select-none, resize, scroll-smooth, ...
+
+```
+cursor-pointer, select-none, resize, scroll-smooth, ...
+```
 
 14. Accessibility:
-> sr-only, not-sr-only, ...
+
+```
+sr-only, not-sr-only, ...
+```
 
 15. Tables:
-> table-auto, table-fixed, border-collapse, border-separate, ...
+
+```
+table-auto, table-fixed, border-collapse, border-separate, ...
+```
 
 16. Transitions (state variants)
-Állapot prefixek külön kezelve, pl.:
-> hover:, focus:, active:, disabled:, group-hover:, peer-focus:, ...
+    Állapot prefixek külön kezelve, pl.:
+
+```
+hover:, focus:, active:, disabled:, group-hover:, peer-focus:, ...
+```
 
 17. Responsive variants:
-A médiaquery prefixek (sm:, md:, lg:, xl:, 2xl:) mindig a végén maradnak, de belül ugyanazt a sorrendet követik, mint az alap classok.
-> 
+    A médiaquery prefixek (sm:, md:, lg:, xl:, 2xl:) mindig a végén maradnak, de belül ugyanazt a sorrendet követik, mint az alap classok.
+    >
