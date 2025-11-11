@@ -23,15 +23,19 @@ function áthaladóKerékpárosok(mérések: number[], óra: number): number {
 }
 
 function maxNegyedóraIndexe(mérések: number[]): number {
-    // HF
+  let maximumIndexe = 0; // A legelsőt kinevezzük legnagyobbank
+  for (let i = 1; i < mérések.length; i++) {
+    if (mérések[i] > mérések[maximumIndexe]) maximumIndexe = i;
+  }
+  return maximumIndexe;
 }
 
 function időpont(index: number): string {
-    // Hf2
-    return "6:30"
+  const időPercben = 6 * 60 + 15 + index * 15;
+  const óra = Math.floor(időPercben / 60);
+  const perc = időPercben % 60;
+  return `${óra}:${perc}`;
 }
-
-
 
 export default function SzamlalasPage() {
   const mérések: number[] = [36, 48, 39, -1, 30, 43, -1, 76, 67, 82, 73, 75, 64, 73, 69, 63];
@@ -42,12 +46,16 @@ export default function SzamlalasPage() {
     stat.push({ óra, áthaladók: áthaladóKerékpárosok(mérések, óra) });
   }
 
-  const maxÁthaladás = Math.max(...stat.map((e) => e.áthaladók));
+  const áthaladókTömb: number[] = stat.map((e) => e.áthaladók);
+  const maxÁthaladás = Math.max(...áthaladókTömb);
 
+  const maxIndex = maxNegyedóraIndexe(mérések);
+
+  const idő: string = időpont(maxIndex);
 
   return (
-    <div className="flex min-h-screen flex-col items-center bg-gray-200 p-6 text-gray-800">
-      <h1 className="mb-8 text-3xl font-bold">Forgalomszámlálás</h1>
+    <div className="flex min-h-screen flex-col items-center space-y-6 bg-gray-200 p-6 text-gray-800">
+      <h1 className="text-3xl font-bold">Forgalomszámlálás</h1>
 
       <div className="w-full max-w-lg rounded-2xl bg-white p-2 shadow-md">
         <h2 className="font-bold">2. feladat</h2>
@@ -56,7 +64,7 @@ export default function SzamlalasPage() {
         </p>
       </div>
 
-      <div className="mt-4 w-full max-w-lg rounded-2xl bg-white p-2 shadow-md">
+      <div className="w-full max-w-lg rounded-2xl bg-white p-2 shadow-md">
         <h2 className="font-bold">3. feladat</h2>
         <h2 className="font-bold">Óránkénti mérések</h2>
         <div>
@@ -75,6 +83,14 @@ export default function SzamlalasPage() {
             </div>
           ))}
         </div>
+      </div>
+
+      <div className="w-full max-w-lg rounded-2xl bg-white p-2 shadow-md">
+        <h2 className="font-bold">4. feladat</h2>
+        <p>
+          Az áthaladók maximális száma: <span className="font-bold">{mérések[maxIndex]}</span>;
+          rögzítés időpontja: <span className="font-bold">{idő}</span>.
+        </p>
       </div>
     </div>
   );
