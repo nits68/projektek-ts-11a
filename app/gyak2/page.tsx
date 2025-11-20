@@ -9,8 +9,14 @@ export default function Gyakorlat2Page() {
   const [válasz, setVálasz] = useState("");
 
   function feladványClick() {
-    const a: number = Math.floor(Math.random() * 9) + 1;
-    const b: number = Math.floor(Math.random() * 9) + 1;
+    let a: number = Math.floor(Math.random() * 9) + 1;
+    let b: number = Math.floor(Math.random() * 9) + 1;
+    if (művelet === "/") {
+      while (a <= b || a % b !== 0 || b == 1) {
+        a = Math.floor(Math.random() * 9) + 1;
+        b = Math.floor(Math.random() * 9) + 1;
+      }
+    }
     setOperandusok({ a, b });
   }
 
@@ -38,6 +44,11 @@ export default function Gyakorlat2Page() {
     }
   }
 
+  function listaClick(e: React.ChangeEvent<HTMLSelectElement>) {
+    setMűvelet(e.target.value);
+    feladványClick();
+  }
+
   return (
     <div className="flex min-h-screen w-full flex-col items-center justify-center bg-gray-200">
       <div className="w-xl rounded-2xl bg-white p-4 shadow-2xl">
@@ -47,7 +58,7 @@ export default function Gyakorlat2Page() {
           <select
             className="select ml-4 text-2xl select-primary"
             value={művelet}
-            onChange={(e) => setMűvelet(e.target.value)}
+            onChange={e => listaClick(e)}
           >
             <option value="+">Összeadás</option>
             <option value="-">Kivonás</option>
