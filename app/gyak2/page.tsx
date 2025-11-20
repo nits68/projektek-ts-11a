@@ -11,12 +11,21 @@ export default function Gyakorlat2Page() {
   function feladványClick() {
     let a: number = Math.floor(Math.random() * 9) + 1;
     let b: number = Math.floor(Math.random() * 9) + 1;
-    if (művelet === "/") {
-      while (a <= b || a % b !== 0 || b == 1) {
+
+    if (művelet != "/") {
+      while (operandusok.a == a) {
+        a = Math.floor(Math.random() * 9) + 1;
+      }
+      while (operandusok.b == b) {
+        b = Math.floor(Math.random() * 9) + 1;
+      }
+    } else {
+      while (operandusok.a == a || operandusok.b == b || a <= b || a % b !== 0) {
         a = Math.floor(Math.random() * 9) + 1;
         b = Math.floor(Math.random() * 9) + 1;
       }
     }
+
     setOperandusok({ a, b });
   }
 
@@ -38,9 +47,9 @@ export default function Gyakorlat2Page() {
     }
 
     if (jóVálasz.toString() === válasz) {
-        toast.success("Jó a válaszod! Jár a süti!")
+      toast.success("Jó a válaszod! Jár a süti!");
     } else {
-        toast.error("Ejnye-bejnye, ez most nem sikerült!")
+      toast.error("Ejnye-bejnye, ez most nem sikerült!");
     }
   }
 
@@ -58,7 +67,7 @@ export default function Gyakorlat2Page() {
           <select
             className="select ml-4 text-2xl select-primary"
             value={művelet}
-            onChange={e => listaClick(e)}
+            onChange={(e) => listaClick(e)}
           >
             <option value="+">Összeadás</option>
             <option value="-">Kivonás</option>
